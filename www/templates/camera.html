@@ -1,22 +1,35 @@
 <ion-view view-title="Scanner">
+
+	<script id="contact-modal.html" type="text/ng-template">
+      <div class="modal">
+        <ion-header-bar>
+          <h1 class="title">Edit Contact</h1>
+        </ion-header-bar>
+        <ion-content>
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Student ID:</span>
+              <input type="text" ng-model="student.id">
+            </label>
+          </div>
+          <button class="button button-full button-energized" ng-click="closeModal()">Done</button>
+        </ion-content>
+      </div>
+    </script>
+
   <ion-content>
 	<div class = "row row-center">
 		<div class = "col  text-center">
 			<button class="button button-stable" ng-click = "scanBarcode()">
 			  Scan
 			</button>
-		</div>
-	</div>
-
-	<div class = "row row-center">
-		<div class = "col  text-center">
-			<button class="button button-stable">
+			<button class="button button-stable" ng-click = "openModal()">
 			  Add ID
 			</button>
 		</div>
 	</div>
 
-	<div class = "row row-center">
+	<div class = "row row-center" ng-if = "isAdd == true">
 		<div class = "col  text-center">
 			<div class="card">
 			  <label class="item ">
@@ -28,18 +41,16 @@
 			    <div class="input-label">
 			      Activities : 
 			    </div>
-			    <select>
-			      <option>Blue</option>
-			      <option selected>Green</option>
-			      <option>Red</option>
+			    <select ng-model ="data.activitiesSelected" >
+			      <option ng-repeat="item in activitylist" value="{{item.id}}">{{item.activity}}</option>
 			    </select>
 			  </label>
 			</div>
-			<button class="button button-stable">
+			<button class="button button-stable" ng-click="add()">
 			  Insert
 			</button>
-			<button class="button button-stable">
-			  Remove
+			<button class="button button-stable" ng-click="discard()">
+			  Discard
 			</button>
 		</div>
 	</div>

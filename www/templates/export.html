@@ -1,0 +1,25 @@
+<ion-view view-title="Account">
+  <ion-content>
+  	<div class = "row">
+	    <div class="list col text-center">
+			  <label class="item item-input item-select">
+			    <div class="input-label">
+			      Activities : 
+			    </div>
+			    <select ng-model ="data.activitiesSelected" >
+			      <option ng-repeat="item in activitylist" value="{{item.id}}">{{item.activity}}</option>
+			    </select>
+			  </label>
+		</div>
+	</div>
+
+	<div class = "row row-center">
+		<div class = "col  text-center">
+			<button class="button button-stable" ng-click="export()">
+			  Export
+			</button>
+		</div>
+	</div>
+
+  </ion-content>
+</ion-view>

@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
-.factory('Chats', function() {
+.factory('Chats', function($cordovaSQLite) {
   // Might use a resource here that returns a JSON array
-
+  var dbs = null;
   // Some fake testing data
   var chats = [{
     id: 0,
@@ -31,6 +31,10 @@ angular.module('starter.services', [])
     face: 'img/mike.png'
   }];
 
+  var listActivity = [];
+  var listStudent = [];
+  var listallStudent = [];
+
   return {
     all: function() {
       return chats;
@@ -47,21 +51,72 @@ angular.module('starter.services', [])
       return null;
     },
 
-    // get_all_db: function(){
-    //   $cordovaSQLite.execute(db, 'SELECT * FROM Messages ORDER BY id DESC')
-    //   .then(
-    //     function(result) {
-    //       if (result.rows.length > 0) {
-    //         for(int i = 0 ; i < result.rows.length ; i++){
-    //           listActivity.push(result.rows.item(i));
-    //         }
-    //         return listActivity;
-    //       }
-    //     },
-    //     function(error) {
-    //       $scope.statusMessage = "Error on loading: " + error.message;
-    //     }
-    //   );
-    // }
+    set: function(object){
+      dbs = object;
+    },
+
+    set_all_activity: function(){
+      $cordovaSQLite.execute(dbs, 'SELECT * FROM Activities')
+      .then(
+        function(result) {
+          if (result.rows.length > 0) {
+            listActivity = [];
+            for(var i = 0 ; i < result.rows.length ; i++){
+              listActivity.push(result.rows.item(i));
+            }
+            console.log(listActivity);
+          }
+        },
+        function(error) {
+          console.log(error);
+        }
+      );
+    },
+
+    get_all_activity: function(){
+      return listActivity;
+    },
+
+    set_student: function(id){
+      console.log(id);
+      $cordovaSQLite.execute(dbs, 'SELECT * FROM Students WHERE activity = ' + id)
+      .then(
+        function(result) {
+          if (result.rows.length > 0) {
+            listStudent = [];
+            for(var i = 0 ; i < result.rows.length ; i++){
+              listStudent.push(result.rows.item(i));
+            }
+            console.log(listStudent);
+          }
+        },
+        function(error) {
+          console.log(error);
+        }
+      );
+    },
+
+    set_all_student: function(id){
+      console.log(id);
+      $cordovaSQLite.execute(dbs, 'SELECT * FROM Students ')
+      .then(
+        function(result) {
+          if (result.rows.length > 0) {
+            listallStudent = [];
+            for(var i = 0 ; i < result.rows.length ; i++){
+              listallStudent.push(result.rows.item(i));
+            }
+            console.log(listallStudent);
+          }
+        },
+        function(error) {
+          console.log(error);
+        }
+      );
+    },
+
+    get_all_student: function(){
+      return listStudent;
+    }
   };
 });

@@ -5,11 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-var db;
+var db = null;
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services' , 'ngCordova'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $cordovaSQLite, Chats) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -24,8 +24,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services' , 
     }
 
     db = $cordovaSQLite.openDB("nextflow.db");
+    Chats.set(db);
+
+        //$cordovaSQLite.execute(db, 'DROP TABLE Activities ');
+       // $cordovaSQLite.execute(db, 'DROP TABLE Students ');
         $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Activities (id INTEGER PRIMARY KEY AUTOINCREMENT, activity TEXT)');
-  });
+        $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS Students (id INTEGER PRIMARY KEY AUTOINCREMENT, studentid TEXT, activity INT)');
+          });
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -45,18 +50,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services' , 
 
   // Each tab has its own nav history stack:
 
-  .state('tab.dash', {
-    url: '/dash',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
-      }
-    }
-  })
-
   .state('tab.activities', {
       url: '/activities',
+      cache: false,
       views: {
         'tab-activities': {
           templateUrl: 'templates/activities.html',
@@ -67,6 +63,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services' , 
 
     .state('tab.activity', {
       url: '/activities/:chatId',
+      cache: false,
       views: {
         'tab-activities': {
           templateUrl: 'templates/activity.html',
@@ -77,6 +74,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services' , 
 
     .state('tab.camera', {
       url: '/camera',
+      cache: false,
       views: {
         'tab-camera': {
           templateUrl: 'templates/camera.html',
@@ -85,17 +83,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services' , 
       }
     })
 
-  .state('tab.account', {
-    url: '/account',
+  .state('tab.export', {
+    url: '/export',
+    cache: false,
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      'tab-export': {
+        templateUrl: 'templates/export.html',
+        controller: 'ExportCtrl'
       }
     }
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/tab/camera');
 
 });
